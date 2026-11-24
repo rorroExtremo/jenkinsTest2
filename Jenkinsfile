@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-
     stages {
         stage('Checkout') {
             steps {
@@ -9,19 +8,15 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Build with Maven') {
+            agent {
+                docker {
+                    image 'maven:3.9-eclipse-temurin-21'
+                }
+            }
             steps {
                 sh 'mvn clean install'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build y pruebas completados correctamente.'
-        }
-        failure {
-            echo 'El pipeline falló. Revisa los logs de Maven o Jenkins.'
         }
     }
 }
